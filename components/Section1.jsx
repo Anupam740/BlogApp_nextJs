@@ -8,27 +8,39 @@ import fetcher from '../lib/fetcher';
 import Spinner from "./_child/spinner";
 import Error from "./_child/error";
 
-export default function Section1() {
 
+export default function Section1() {
     const { data, isLoading, isError } = fetcher('api/trending');
 
     if (isLoading) return <Spinner />;
     if (isError) return <Error />;
 
     SwiperCore.use([Autoplay]);
-
     
+
     return (
-        <section className="py-16" >
+        <section className="py-16">
             <div className="container mx-auto md:px-20">
                 <h1 className="font-bold text-4xl pb-12 text-center">Trending</h1>
 
-                <Swiper
+                <Swiper 
                     slidesPerView={1}
                     loop={true}
-                    autoplay= {{
-                        delay: 2000
+                    autoplay={{
+                        delay: 2000,
+                        pauseOnMouseEnter: true,
+
+                        disableOnInteraction: false,
+
                     }}
+                    pagination={{
+                        clickable: true,
+                      }}
+                      navigation={true}
+                      
+                      
+
+              
                 >
                     {data.map((value, index) => (
                         <SwiperSlide key={index}><Slide data={value} /></SwiperSlide>
@@ -40,7 +52,6 @@ export default function Section1() {
 }
 
 function Slide({ data }) {
-
     const { id, title, category, img, published, description, author } = data;
 
     return (

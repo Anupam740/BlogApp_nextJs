@@ -5,13 +5,19 @@ import Section1 from "../components/Section1";
 import Section2 from "../components/Section2";
 import Section3 from "../components/Section3";
 import Section4 from "../components/Section4";
+import Section5 from "../components/Section5";
+import DataDisplay from "../components/DataDisplay";
+import axios from 'axios';
 
-export default function Home() {
+export default function Home({data}) {
+    console.log({data},"----------------")
   return (
-    <div >
+    <div className="px-1" >
       <Format> 
         
         <Section1/>
+        <Section5/>
+        <DataDisplay/>
         <Section2/>
         <Section3/>
         <Section4/>
@@ -27,3 +33,20 @@ export default function Home() {
     </div>
   )
 }
+export async function getServerSideProps(context) {
+    const { filename } = context.query;
+  
+    try {
+      const response = await axios.get(`/api/fetch-data/1`);
+
+
+
+
+
+      const data = response.data;
+      return { props: { data } };
+    } catch (error) {
+      console.error(error);
+      return { props: { data: null } };
+    }
+  }

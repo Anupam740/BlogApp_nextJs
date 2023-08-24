@@ -1,93 +1,79 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 
-export default function CreatePostForm() {
-    const [title, setTitle] = useState('');
-    const [content, setContent] = useState('');
-    const [image, setImage] = useState(null);
+const CreatePost = () => {
+  const [title, setTitle] = useState('');
+  const [description, setDescription] = useState('');
+  const [image, setImage] = useState(null);
 
-    const handleTitleChange = (event) => {
-        setTitle(event.target.value);
-    };
+  const handleTitleChange = (e) => {
+    setTitle(e.target.value);
+  };
 
-    const handleContentChange = (event) => {
-        setContent(event.target.value);
-    };
+  const handleDescriptionChange = (e) => {
+    setDescription(e.target.value);
+  };
 
-    const handleImageChange = (event) => {
-        const selectedImage = event.target.files[0];
-        setImage(selectedImage);
-    };
+  const handleImageChange = (e) => {
+    setImage(e.target.files[0]);
+  };
 
-    const handleSubmit = async (event) => {
-        event.preventDefault();
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
-        // Create a new FormData object to hold the form data
-        const formData = new FormData();
-        formData.append('title', title);
-        formData.append('content', content);
-        formData.append('image', image);
+    const formData = new FormData();
+    formData.append('title', title);
+    formData.append('description', description);
+    formData.append('image', image);
 
-        try {
-            const response = await fetch('http://localhost:3000/', {
-                method: 'POST',
-                body: formData,
-            });
+    try {
+      const response = await fetch('http://localhost:3000/api/createpost', {
+        method: 'POST',
+        body: formData,
+      });
 
-            if (response.ok) {
-                console.log('Post data submitted successfully!');
-            } else {
-                console.error('Failed to submit post data');
-            }
-        } catch (error) {
-            console.error('An error occurred:', error);
-        }
+      if (response.ok) {
+        // Handle success, maybe show a success message
+        console.log('Post created successfully');
+      } else {
+        // Handle error, maybe show an error message
+        console.error('Failed to create post');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  };
 
-        // Reset form fields after submission
-        setTitle('');
-        setContent('');
-        setImage(null);
-    };
-
-    return (
-        <div className="max-w-md mx-auto p-6 bg-gray-600 mt-14 rounded shadow-lg">
-            <h1 className="text-2xl font-bold mb-4">Create a New Blog Post</h1>
-            <form onSubmit={handleSubmit}>
-                <div className="mb-4">
-                    <label htmlFor="title" className="block font-semibold mb-1">Title:</label>
-                    <input
-                        type="text"
-                        id="title"
-                        className="w-full py-2 px-4 border rounded focus:outline-none focus:border-blue-400"
-                        value={title}
-                        onChange={handleTitleChange}
-                    />
-                </div>
-                <div className="mb-4">
-                    <label htmlFor="content" className="block font-semibold mb-1">Content:</label>
-                    <textarea
-                        id="content"
-                        className="w-full h-32 py-2 px-4 border rounded focus:outline-none focus:border-blue-400"
-                        value={content}
-                        onChange={handleContentChange}
-                    />
-                </div>
-                <div className="mb-4">
-                    <label htmlFor="image" className="block font-semibold mb-1">Image:</label>
-                    <input
-                        type="file"
-                        id="image"
-                        accept="image/*"
-                        className="w-full py-2 px-4 border rounded focus:outline-none focus:border-blue-400"
-                        onChange={handleImageChange}
-                    />
-                </div>
-                <button
-                    type="submit"
-                    className="bg-orange-400 hover:bg-orange-600 text-white py-2 px-4 rounded-full cursor-pointer  mt-4:outline-none focus:shadow-outline"
-                >
-                    Create Post
-                </button>
-            </form>
+  return (
+    <div>
+      <h2>Create a New Post</h2>
+      <form onSubmit={handleSubmit}>
+        <div>
+          <label htmlFor="title">Title:</label>
+          <input
+            type="text"
+            id="title"
+            value={title}
+            onChange={handleTitleChange}
+            required
+          />
         </div>
-    );
-}
+        <div>
+          <label htmlFor="description">Description:</label>
+          <textarea
+            id="description"
+            value={description}
+            onChange={handleDescriptionChange}
+            required
+          />
+        </div>
+        <div>
+          <label htmlFor="image">Image:</label>
+          <input type="file" id="image" onChange={handleImageChange} accept="image/*" required />
+        </div>
+        <button type="submit">Submit</button>
+      </form>
+    </div>
+  );
+};
+
+export default CreatePost;
