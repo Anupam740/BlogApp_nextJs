@@ -58,7 +58,7 @@ function Slide({ data }) {
         <div className="grid md:grid-cols-2">
             <div className="image">
                 <Link href={`/posts/${id}`}>
-                    <Image src={img || "/"} width={600} height={600} />
+                    <Image src={img || "/"} width={600} height={600} alt="img not found" />
                 </Link>
             </div>
             <div className="info flex justify-center flex-col">
